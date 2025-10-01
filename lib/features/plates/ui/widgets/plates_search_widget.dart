@@ -1,6 +1,6 @@
-import 'dart:async';
 import 'package:app_tracuubiensoxe/features/plates/data/enums/plates_enum.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class PlatesSearchWidget extends StatefulWidget {
   const PlatesSearchWidget({super.key});
@@ -12,17 +12,18 @@ class PlatesSearchWidget extends StatefulWidget {
 class _PlatesSearchWidgetState extends State<PlatesSearchWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String? plateNumber;
-  VehicleType? vehicleType = VehicleType.motobike;
-  Timer? _debounce;
+  String? _plateNumber;
+  VehicleType _vehicleType = VehicleType.motobike;
 
-  void setVehicleType(VehicleType? value) => setState(() {
-    vehicleType = value;
-  });
+  void _setVehicleType(VehicleType? value) {
+    _formKey.currentState!.validate();
+    setState(() {
+      _vehicleType = value!;
+    });
+  }
 
-  void submit() {
-    print(plateNumber);
-    print(vehicleType);
+  void _submit() {
+    print((plateNumber: _plateNumber, vehicleType: _vehicleType));
   }
 
   @override
@@ -36,23 +37,26 @@ class _PlatesSearchWidgetState extends State<PlatesSearchWidget> {
           TextFormField(
             onChanged: (String? value) {
               setState(() {
-                plateNumber = value;
+                _plateNumber = value;
               });
             },
+            onFieldSubmitted: (String? value) => _submit(),
             textCapitalization: TextCapitalization.characters,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9-]')),
+              UpperCaseTextFormatter(),
+            ],
             decoration: const InputDecoration(
               hintText: "51N9-12345",
               labelText: "Nhập biển số xe cần tra cứu",
             ),
-            initialValue: plateNumber,
+            initialValue: _plateNumber,
             validator: (String? value) {
               if (value == null || value.isEmpty) {
                 return 'Mời nhập biển số xe';
               }
 
-              final pattern = RegExp(
-                r'^\d{2}(?:[A-Za-z]{2}|[A-Za-z]\d)-\d{4,5}$',
-              );
+              final pattern = RegExp(_vehicleType.platePattern);
               final match = pattern.hasMatch(value);
               if (!match) {
                 return 'Định dạng biển số xe không đúng';
@@ -62,8 +66,8 @@ class _PlatesSearchWidgetState extends State<PlatesSearchWidget> {
             },
           ),
           RadioGroup(
-            groupValue: vehicleType,
-            onChanged: setVehicleType,
+            groupValue: _vehicleType,
+            onChanged: _setVehicleType,
             child: Row(
               children: [
                 Expanded(
@@ -85,7 +89,7 @@ class _PlatesSearchWidgetState extends State<PlatesSearchWidget> {
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                submit();
+                _submit();
               }
             },
             icon: Icon(
@@ -94,7 +98,10 @@ class _PlatesSearchWidgetState extends State<PlatesSearchWidget> {
             ),
             label: Text(
               "Tra cứu",
-              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimary,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.all(
@@ -105,5 +112,15 @@ class _PlatesSearchWidgetState extends State<PlatesSearchWidget> {
         ],
       ),
     );
+  }
+}
+
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    return newValue.copyWith(text: newValue.text.toUpperCase());
   }
 }

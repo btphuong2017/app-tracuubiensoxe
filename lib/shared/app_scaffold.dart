@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppScaffold extends StatelessWidget {
-  const AppScaffold({
-    super.key,
-    required Widget this.child,
-    required String this.title,
-  });
+  const AppScaffold({super.key, required this.child, required this.title});
 
   final String title;
   final Widget child;
@@ -14,7 +10,12 @@ class AppScaffold extends StatelessWidget {
   Widget build(context) {
     return Scaffold(
       appBar: AppBar(title: Text(title), centerTitle: true),
-      body: Padding(padding: EdgeInsets.all(16), child: child),
+      body: SafeArea(
+        child: ListView(
+          scrollDirection: Axis.vertical,
+          children: [Padding(padding: EdgeInsets.all(16), child: child)],
+        ),
+      ),
     );
   }
 }
