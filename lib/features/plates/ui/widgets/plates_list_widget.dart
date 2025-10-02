@@ -1,3 +1,5 @@
+import 'package:app_tracuubiensoxe/features/plates/ui/pages/plates_detail_page.dart';
+import 'package:app_tracuubiensoxe/features/plates/ui/widgets/plates_infor_widget.dart';
 import 'package:flutter/material.dart';
 
 class PlatesListWidget extends StatelessWidget {
@@ -33,6 +35,12 @@ class PlatesListWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             onTap: () {
               print(plate);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const PlatesDetailPage(),
+                ),
+              );
             },
             child: Container(
               decoration: BoxDecoration(
@@ -45,7 +53,7 @@ class PlatesListWidget extends StatelessWidget {
                   style: const TextStyle(
                     color: Colors.black, // đọc được trên nền đen
                     fontWeight: FontWeight.w900,
-                    fontSize: 20
+                    fontSize: 20,
                   ),
                 ),
               ),
