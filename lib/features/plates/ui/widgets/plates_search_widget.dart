@@ -1,6 +1,7 @@
 import 'package:app_tracuubiensoxe/features/plates/data/enums/plates_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 
 class PlatesSearchWidget extends StatefulWidget {
   const PlatesSearchWidget({super.key});
@@ -22,8 +23,9 @@ class _PlatesSearchWidgetState extends State<PlatesSearchWidget> {
     });
   }
 
-  void _submit() {
+  void _submit(BuildContext context) {
     print((plateNumber: _plateNumber, vehicleType: _vehicleType));
+    context.go(Uri(path: "/plate/$_plateNumber").toString());
   }
 
   @override
@@ -40,7 +42,7 @@ class _PlatesSearchWidgetState extends State<PlatesSearchWidget> {
                 _plateNumber = value;
               });
             },
-            onFieldSubmitted: (String? value) => _submit(),
+            onFieldSubmitted: (String? value) => _submit(context),
             textCapitalization: TextCapitalization.characters,
             inputFormatters: [
               FilteringTextInputFormatter.allow(RegExp(r'[A-Za-z0-9-]')),
@@ -89,7 +91,7 @@ class _PlatesSearchWidgetState extends State<PlatesSearchWidget> {
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                _submit();
+                _submit(context);
               }
             },
             icon: Icon(

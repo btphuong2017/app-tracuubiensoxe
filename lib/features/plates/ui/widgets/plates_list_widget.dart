@@ -1,16 +1,15 @@
-import 'package:app_tracuubiensoxe/features/plates/ui/pages/plates_detail_page.dart';
-import 'package:app_tracuubiensoxe/features/plates/ui/widgets/plates_infor_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class PlatesListWidget extends StatelessWidget {
   PlatesListWidget({super.key});
 
   final List<String> plates = [
     "51N1-12341",
-    "51N1-12341",
-    "51N1-12341",
-    "51N1-12341",
-    "51N1-12341",
+    "51N1-12342",
+    "51N1-12343",
+    "51N1-12344",
+    "51N1-12345",
   ];
 
   @override
@@ -34,13 +33,7 @@ class PlatesListWidget extends StatelessWidget {
           child: InkWell(
             borderRadius: BorderRadius.circular(8),
             onTap: () {
-              print(plate);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const PlatesDetailPage(),
-                ),
-              );
+              context.go(Uri(path: "/plate/$plate").toString());
             },
             child: Container(
               decoration: BoxDecoration(

@@ -1,20 +1,57 @@
+import 'package:app_tracuubiensoxe/features/plates/data/models/plate_model.dart';
 import 'package:flutter/material.dart';
 
-class PlatesInforWidget extends StatelessWidget {
-  final _labelStyle = TextStyle(fontSize: 12, color: Colors.grey.shade600);
-  final _contentStyle = TextStyle(fontWeight: FontWeight.bold);
+class _InforItem extends StatelessWidget {
+  _InforItem({super.key, required this.label, required this.value});
+
+  final String label;
+  final String value;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final labelStyle = theme.textTheme.labelSmall?.copyWith(
+      color: theme.colorScheme.onSurfaceVariant,
+    );
+    final valueStyle = theme.textTheme.titleMedium?.copyWith(
+      fontWeight: FontWeight.w700,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(label, style: labelStyle),
+        Text(value, style: valueStyle),
+      ],
+    );
+  }
+}
+
+class PlatesInforWidget extends StatelessWidget {
+  const PlatesInforWidget({super.key, required this.plate});
+
+  final Plate plate;
+
+  static const Map<String, String> properties = {
+    "province": "Tỉnh/Thành",
+    "owner": "Chủ sở hữu",
+    "company": "Hãng xe",
+    "model": "Dòng xe",
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final keys = properties.keys.toList();
+
     return Card.outlined(
-      color: Colors.white,
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
         side: BorderSide(
           color: Theme.of(context).colorScheme.outlineVariant,
           style: BorderStyle.solid,
         ),
-        borderRadius: BorderRadiusGeometry.all(Radius.circular(8)),
+        borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       child: Column(
         spacing: 16,
@@ -25,10 +62,9 @@ class PlatesInforWidget extends StatelessWidget {
             child: Text(
               "Kết quả tra cứu biển số 59N1-12345",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
           Divider(
@@ -41,24 +77,16 @@ class PlatesInforWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 8,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Tỉnh/Thành", style: _labelStyle),
-                    Text("Ninh Bình", style: _contentStyle),
-                  ],
-                ),
-                Divider(
-                  height: 1,
-                  color: Theme.of(context).colorScheme.outlineVariant,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Chủ sở hữu", style: _labelStyle),
-                    Text("Thông tin mật", style: _contentStyle),
-                  ],
-                ),
+                for (var i = 0; i < keys.length; i++) ...[
+                  _InforItem(
+                    label: properties[keys[i]]!,
+                    value: plate[keys[i]],
+                  ),
+                  Divider(
+                    height: 1,
+                    color: Theme.of(context).colorScheme.outlineVariant,
+                  ),
+                ],
               ],
             ),
           ),
