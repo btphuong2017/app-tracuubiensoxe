@@ -1,16 +1,11 @@
+import 'package:app_tracuubiensoxe/features/plates/data/models/plate_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class PlatesListWidget extends StatelessWidget {
-  PlatesListWidget({super.key});
+  const PlatesListWidget({super.key, required this.plates});
 
-  final List<String> plates = [
-    "51N1-12341",
-    "51N1-12342",
-    "51N1-12343",
-    "51N1-12344",
-    "51N1-12345",
-  ];
+  final List<Plate> plates;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +28,7 @@ class PlatesListWidget extends StatelessWidget {
           child: InkWell(
             borderRadius: BorderRadius.circular(8),
             onTap: () {
-              context.go(Uri(path: "/plate/$plate").toString());
+              context.go(Uri(path: "/plate/${plate.plateNo}").toString());
             },
             child: Container(
               decoration: BoxDecoration(
@@ -42,7 +37,7 @@ class PlatesListWidget extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  plate,
+                  plate.plateNo,
                   style: const TextStyle(
                     color: Colors.black, // đọc được trên nền đen
                     fontWeight: FontWeight.w900,

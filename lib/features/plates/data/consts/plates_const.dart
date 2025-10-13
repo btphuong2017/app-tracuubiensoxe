@@ -1,0 +1,1 @@
+const plateCacheBox = 'plates_cache_v1';

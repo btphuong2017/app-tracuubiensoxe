@@ -9,7 +9,15 @@ class AppScaffold extends StatelessWidget {
   @override
   Widget build(context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title), centerTitle: true),
+      appBar: AppBar(
+        title: Text(
+          title,
+          style: Theme.of(
+            context,
+          ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: ListView(
           scrollDirection: Axis.vertical,

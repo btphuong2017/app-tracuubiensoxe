@@ -1,8 +1,13 @@
+import 'package:app_tracuubiensoxe/features/plates/data/plates_repository.dart';
+import 'package:app_tracuubiensoxe/features/plates/ui/pages/plates_detail_page.dart';
+import 'package:app_tracuubiensoxe/features/plates/ui/pages/plates_search_page.dart';
 import 'package:flutter/material.dart';
-import 'package:app_tracuubiensoxe/app/router.dart';
+import 'package:go_router/go_router.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.platesRepository});
+
+  final PlatesRepository platesRepository;
 
   // This widget is the root of your application.
   @override
@@ -15,7 +20,24 @@ class MyApp extends StatelessWidget {
         ),
         fontFamily: "OpenSans",
       ),
-      routerConfig: routerConfig,
+      routerConfig: GoRouter(
+        routes: [
+          GoRoute(
+            path: "/",
+            builder: (context, state) =>
+                PlatesSearchPage(platesRepository: platesRepository),
+            routes: [
+              GoRoute(
+                path: "/plate/:plateNumber",
+                builder: (context, state) => PlatesDetailPage(
+                  plateNumber: state.pathParameters['plateNumber']!,
+                  platesRepository: platesRepository,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

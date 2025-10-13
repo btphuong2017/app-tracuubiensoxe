@@ -9,9 +9,10 @@ class Plate {
   final List<String> images;
   final String link;
   final dynamic author;
-  final String createdAt;
+  final DateTime createdAt;
+  DateTime? cachedAt;
 
-  const Plate({
+  Plate({
     required this.id,
     required this.plateNo,
     required this.type,
@@ -23,6 +24,7 @@ class Plate {
     required this.link,
     required this.author,
     required this.createdAt,
+    this.cachedAt,
   });
 
   factory Plate.fromJson(Map<String, dynamic> json) {
@@ -51,7 +53,10 @@ class Plate {
           images: images.map((e) => e as String).toList(),
           link: link,
           author: author,
-          createdAt: createdAt,
+          createdAt: DateTime.parse(createdAt),
+          cachedAt: json['cachedAt'] != null && json['cachedAt'].isNotEmpty
+              ? DateTime.parse(json['cachedAt'])
+              : DateTime.now(),
         ),
       _ => throw const FormatException('Failed to load plate.'),
     };
@@ -73,8 +78,25 @@ class Plate {
         return link;
       case 'owner':
         return owner;
+      case 'cachedAt':
+        return cachedAt;
       default:
         throw ArgumentError('Unknown key: $key');
     }
   }
+
+  Map<String, dynamic> toJson() => {
+    '_id': id,
+    'plateNo': plateNo,
+    'type': type,
+    'province': province,
+    'owner': owner,
+    'company': company,
+    'model': model,
+    'images': images,
+    'link': link,
+    'author': author,
+    'createdAt': createdAt.toIso8601String(),
+    'cachedAt': cachedAt!.toIso8601String(),
+  };
 }

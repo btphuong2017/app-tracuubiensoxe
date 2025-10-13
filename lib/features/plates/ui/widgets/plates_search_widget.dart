@@ -1,4 +1,5 @@
 import 'package:app_tracuubiensoxe/features/plates/data/enums/plates_enum.dart';
+import 'package:app_tracuubiensoxe/features/plates/data/plates_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -24,7 +25,6 @@ class _PlatesSearchWidgetState extends State<PlatesSearchWidget> {
   }
 
   void _submit(BuildContext context) {
-    print((plateNumber: _plateNumber, vehicleType: _vehicleType));
     context.go(Uri(path: "/plate/$_plateNumber").toString());
   }
 

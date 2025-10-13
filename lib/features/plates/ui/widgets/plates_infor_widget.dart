@@ -1,5 +1,6 @@
 import 'package:app_tracuubiensoxe/features/plates/data/models/plate_model.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class _InforItem extends StatelessWidget {
   _InforItem({super.key, required this.label, required this.value});
@@ -43,6 +44,7 @@ class PlatesInforWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final keys = properties.keys.toList();
+    final dateFormatter = DateFormat('dd/MM/yyyy HH:mm');
 
     return Card.outlined(
       clipBehavior: Clip.antiAlias,
@@ -59,12 +61,27 @@ class PlatesInforWidget extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.only(top: 16, bottom: 0, left: 16, right: 16),
-            child: Text(
-              "Kết quả tra cứu biển số 59N1-12345",
-              textAlign: TextAlign.center,
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+            child: Column(
+              children: [
+                Text(
+                  "Kết quả tra cứu biển số 59N1-12345",
+                  textAlign: TextAlign.center,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                if (plate.cachedAt != null)
+                  Column(
+                    children: [
+                      SizedBox(height: 8),
+                      Text(
+                        "Cập nhật lần cuối lúc ${dateFormatter.format(plate.cachedAt!)}",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+              ],
             ),
           ),
           Divider(
@@ -82,10 +99,12 @@ class PlatesInforWidget extends StatelessWidget {
                     label: properties[keys[i]]!,
                     value: plate[keys[i]],
                   ),
-                  Divider(
-                    height: 1,
-                    color: Theme.of(context).colorScheme.outlineVariant,
-                  ),
+
+                  if (i < keys.length - 1)
+                    Divider(
+                      height: 1,
+                      color: Theme.of(context).colorScheme.outlineVariant,
+                    ),
                 ],
               ],
             ),
